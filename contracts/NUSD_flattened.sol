@@ -1,9 +1,45 @@
-// SPDX-License-Identifier: MIT
+
+// File: @chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol
+
+
 pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+interface AggregatorV3Interface {
+  function decimals() external view returns (uint8);
+
+  function description() external view returns (string memory);
+
+  function version() external view returns (uint256);
+
+  function getRoundData(uint80 _roundId)
+    external
+    view
+    returns (
+      uint80 roundId,
+      int256 answer,
+      uint256 startedAt,
+      uint256 updatedAt,
+      uint80 answeredInRound
+    );
+
+  function latestRoundData()
+    external
+    view
+    returns (
+      uint80 roundId,
+      int256 answer,
+      uint256 startedAt,
+      uint256 updatedAt,
+      uint80 answeredInRound
+    );
+}
+
+// File: NUSD.sol
+
+
+pragma solidity ^0.8.0;
+
 //0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e
-//0xD68C10D62A3b823cfa4193063fCd6d7e4E178057
 contract NUSD {
     string public name;
     string public symbol;
