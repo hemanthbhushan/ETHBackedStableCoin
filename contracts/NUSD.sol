@@ -9,7 +9,6 @@ contract NUSD {
     uint8 public decimals;
     uint256 public totalSupply;
     address private oracle;
-    uint256 private ethToUsdPrice;
 
     mapping(address => uint256) public balanceOf;
 
@@ -18,17 +17,18 @@ contract NUSD {
     constructor(address _oracleAddress) {
         name = "nUSD";
         symbol = "nUSD";
-        decimals = 18;
+        decimals = 8;
         totalSupply = 0;
         oracle = _oracleAddress;
     }
 
     function deposit() external payable {
         // Get the latest ETH price from the Chainlink Oracle
+        uint256 ethToUsdPrice;
         ethToUsdPrice = getEthToUsdPrice();
 
         // Calculate the amount of nUSD to mint
-        uint256 nUSDAmount = (msg.value * ethToUsdPrice) / 2;
+        uint256 nUSDAmount = (msg.value * (ethToUsdPrice)) / 2;
 
         // Mint nUSD to the depositor
         balanceOf[msg.sender] += nUSDAmount;
@@ -39,9 +39,10 @@ contract NUSD {
 
     function redeem(uint256 _nUSDAmount) external {
         require(balanceOf[msg.sender] >= _nUSDAmount, "Insufficient balance");
-
+        uint256 ethToUsdPrice;
+        ethToUsdPrice = getEthToUsdPrice();
         // Calculate the amount of ETH to send back based on the current ETH price
-        uint256 ETHAmount = (_nUSDAmount * ethToUsdPrice) / 2;
+        uint256 ETHAmount = ((_nUSDAmount) / (ethToUsdPrice)) * 2;
 
         // Burn nUSD from the sender's balance
         balanceOf[msg.sender] -= _nUSDAmount;
